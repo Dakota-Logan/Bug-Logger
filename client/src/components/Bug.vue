@@ -11,7 +11,8 @@
 <script>
 	export default {
 		name: 'bug-list',
-		props:  ['data'],
+		props:  ['data'],filter(id, definition) {
+		},
 		computed:{
 
 		},

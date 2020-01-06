@@ -19,7 +19,7 @@
 			<h1>Current Bugs:</h1> <button type="button" @click="sort()">Sort By Completion</button>
 			<table  class="bugs">
 				<tr><th>Title</th><th>Reported By</th><th>Status</th><th>Last Modified</th></tr>
-				<bug-component v-for="bug in bugs" :key="bug.id" :data="bug" />
+				<bug-component v-for="bug in bugs" :key="bug.id" :data="bug"/>
 			</table>
 		</main>
 

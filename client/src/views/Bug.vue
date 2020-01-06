@@ -13,30 +13,31 @@
 		<main>
 			<div id="bug-details">
 <!--				{{bug}}-->
-				<h1 v-if="bug.closed">This bug has been closed</h1>
-				<h1>{{bug.title}}</h1>
+				<h1 v-if="bug.closed" style="color:red; font-size: 45px; margin: 1rem;">This bug has been closed</h1>
+				<h2>{{bug.title}}</h2>
 				<h3>Reported: {{bug.updatedAt.split("T")[0]}}</h3>
 				<h3>Reported by: {{bug.reportedBy}}</h3>
-				<button><h4>Close</h4></button>
+				<button type="button" @click=""><h4>Edit</h4></button>
+				<button type="button" @click="close"><h4>Close</h4></button>
 			</div>
 			<div >
 				<h1>Comments: </h1>
 				<table>
 					<tr>
-						<th>Flag</th>
 						<th>Content</th>
 						<th>Reported By</th>
 						<th>Reported</th>
+						<th></th>
 					</tr>
+					<comment v-for="comment in comments" :key="comment.id" :data="comment" class="comment"></comment>
 				</table>
-				<comment v-for="comment in comments" :key="comment.id" :data="comment" class="comment"></comment>
 			</div>
 			<div id="comment-form-wrapper">
 				<form id="add-bug-form" @submit.prevent="addComment">
 					<div>
 						<label for="bug-title">Title: </label><input type="text" id="bug-title">
 						<label for="bug-owner">Info: </label><input type="text" id="bug-owner">
-						<label for="bug-name">Name: </label><input type="text" id="bug-name">
+						<label for="bug-name">Name: </label><input type="text" id="comment-info">
 					</div>
 					<button type="submit">Add Bug</button>
 				</form>
@@ -70,13 +71,20 @@
 		},
 		methods: {
 			close () {
-				this.$store.dispatch()
+				if(confirm("Are you sure you want to close this bug?")){
+					this.$store.dispatch('closeBug', this.$route.params.id);
+				}
 			},
 			addComment (formData) {
 				this.$store.dispatch('addComment', {
 					content: formData.target['bug-description'].value,
 					bug: this.bug.id,
 					reportedBy: formData.target['bug-name'].value
+				});
+			},
+			edit (eventData) {
+				this.$store.dispatch('editBug', {
+
 				});
 			}
 		}
@@ -107,13 +115,12 @@
 		justify-content: space-between;
 	}
 	th, td {
-
+		margin: 0 auto;
 
 		text-align: center;
 		white-space: nowrap;
 		width: 20%;
-		overflow-x: hidden;
-		text-overflow: ellipsis;
+		word-wrap: break-spaces;
 
 	}
 
@@ -121,12 +128,18 @@
 		min-width: 100%;
 		display: flex;
 
-		flex-direction: column;
+		flex-direction: row;
 		align-content: center;
 		justify-content: center;
 	}
 
 	#home-link{
 		margin: 0 auto;
+	}
+
+	#bug-details {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>

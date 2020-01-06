@@ -17,7 +17,6 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		setBugs (state, bugs) {
-
 			state.bugs = bugs;
 		},
 		setActiveBug (state, bug) {
@@ -25,6 +24,9 @@ export default new Vuex.Store({
 		},
 		setActiveComments (state, comments) {
 			state.comments = comments;
+		},
+		removeComment (state, id) {
+			state.comments = state.comments.filter(cur => cur.id===id);
 		}
 	},
 	actions: {
@@ -47,6 +49,7 @@ export default new Vuex.Store({
 			// console.log(data);
 			let res = await _api.post('api/bugs', data);
 			// console.log(res.data);
+			commit('setActiveBug', res.data);
 			return res.data.id
 		},
 		async addComment ({dispatch}, data) {
@@ -55,13 +58,15 @@ export default new Vuex.Store({
 
 		async closeBug ({dispatch}, id) {
 			await _api.delete('api/bugs/'+id);
-			dispatch('getBugs');
+			dispatch('getBugById');
 		},
-		async deleteComment ({dispatch}, id) {
-
+		async deleteComment ({commit}, bugId, noteId) {
+			commit('removeComment', noteId);
+			console.log(bugId, noteId);
+			_api.delete('bugs/'+bugId+'/notes/'+noteId);
 		},
 
-		sortBugsByCompletion({commit, state}, flipBool) {
+		sortBugsByCompletion ({commit, state}, flipBool) {
 			let newBugs = [];
 			state.bugs.forEach(cur => {
 				if(cur.closed==flipBool) {
