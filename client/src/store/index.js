@@ -45,7 +45,7 @@ export default new Vuex.Store({
 			commit("setActiveComments", res.data);
 		},
 
-		async addBug ({dispatch}, data) {
+		async addBug ({commit}, data) {
 			// console.log(data);
 			let res = await _api.post('api/bugs', data);
 			// console.log(res.data);

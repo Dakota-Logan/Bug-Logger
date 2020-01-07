@@ -35,8 +35,7 @@
 			<div id="comment-form-wrapper">
 				<form id="add-bug-form" @submit.prevent="addComment">
 					<div>
-						<label for="bug-title">Title: </label><input type="text" id="bug-title">
-						<label for="bug-owner">Info: </label><input type="text" id="bug-owner">
+						<label for="bug-owner">Info: </label><input type="text" id="comment-description">
 						<label for="bug-name">Name: </label><input type="text" id="comment-info">
 					</div>
 					<button type="submit">Add Bug</button>
@@ -77,9 +76,9 @@
 			},
 			addComment (formData) {
 				this.$store.dispatch('addComment', {
-					content: formData.target['bug-description'].value,
+					content: formData.target['comment-description'].value,
 					bug: this.bug.id,
-					reportedBy: formData.target['bug-name'].value
+					reportedBy: formData.target['comment-name'].value
 				});
 			},
 			edit (eventData) {
